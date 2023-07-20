@@ -6,20 +6,20 @@ import os
 import pygame
 import speech_recognition as sr
 
-def load_knowledge_base(file_path):
-    with open(file_path, 'r') as file:
+def loadKknowledgeBase(filePath):
+    with open(filePath, 'r') as file:
         return json.load(file)
 
-def save_knowledge_base(file_path, data):
-    with open(file_path, 'w') as file:
+def saveKnowledgeBase(filePath, data):
+    with open(filePath, 'w') as file:
         json.dump(data, file, indent=2)
 
-def find_best_match(user_question, questions):
-    matches = get_close_matches(user_question, questions, n=1, cutoff=0.6)
+def findBestMatch(userQuestion, questions):
+    matches = get_close_matches(userQuestion, questions, n=1, cutoff=0.7)
     return matches[0] if matches else None
 
-def get_answer_for_question(question, knowledge_base):
-    for q in knowledge_base["questions"]:
+def getAnswerForQuestion(question, knowledgeBase):
+    for q in knowledgeBase["questions"]:
         if q["question"] == question:
             return q["answer"]
     return None
@@ -31,9 +31,9 @@ def speak(text, lang='ro'):
     pygame.mixer.music.load("bot_response.mp3")
     pygame.mixer.music.play()
     while pygame.mixer.music.get_busy():
-        pygame.time.Clock().tick(10)  # Adjust the tick rate
-    pygame.mixer.music.fadeout(500)  # Stop the music with a fadeout effect
-    pygame.mixer.quit()  # Clean up the mixer resources
+        pygame.time.Clock().tick(10) 
+    pygame.mixer.music.fadeout(500)  
+    pygame.mixer.quit() 
     os.remove("bot_response.mp3")
 
 def listen_for_response():
@@ -45,9 +45,9 @@ def listen_for_response():
         recognizer.adjust_for_ambient_noise(source)
         try:
             audio = recognizer.listen(source)
-            user_response = recognizer.recognize_google(audio, language='ro-RO').lower()
-            print("User Response:", user_response)
-            return user_response
+            userResponse = recognizer.recognize_google(audio, language='ro-RO').lower()
+            print("User Response:", userResponse)
+            return userResponse
         except sr.UnknownValueError:
             print("Bot: Nu am putut înțelege ceea ce ai spus. Te rog repetă.")
             speak("Nu am putut înțelege ceea ce ai spus. Te rog repetă.", lang='ro')
@@ -58,7 +58,7 @@ def listen_for_response():
             return None
 
 def chatbot():
-    knowledge_base = load_knowledge_base('knowledge_base.json')
+    knowledgeBase = loadKknowledgeBase('knowledgeBase.json')
 
     while True:
         recognizer = sr.Recognizer()
@@ -69,8 +69,8 @@ def chatbot():
             recognizer.adjust_for_ambient_noise(source)
             try:
                 audio = recognizer.listen(source)
-                user_input = recognizer.recognize_google(audio, language='ro-RO').lower()
-                print("Tu:", user_input)
+                userInput = recognizer.recognize_google(audio, language='ro-RO').lower()
+                print("Tu:", userInput)
             except sr.UnknownValueError:
                 print("Bot: Nu am putut înțelege ceea ce ai spus. Te rog repetă.")
                 speak("Nu am putut înțelege ceea ce ai spus. Te rog repetă.", lang='ro')
@@ -80,28 +80,28 @@ def chatbot():
                 speak("Serviciul de recunoaștere vocală nu este disponibil momentan. Te rog încearcă mai târziu.", lang='ro')
                 break
 
-            if user_input == 'ieși acum':
+            if userInput == 'ieși acum':
                 break
 
-            best_match = find_best_match(user_input, [q["question"] for q in knowledge_base["questions"]])
+            bestMatch = findBestMatch(userInput, [q["question"] for q in knowledgeBase["questions"]])
 
-            if best_match:
-                answer = get_answer_for_question(best_match, knowledge_base)
+            if bestMatch:
+                answer = getAnswerForQuestion(bestMatch, knowledgeBase)
                 print(f"Bot: {answer}")
-                speak(answer, lang='ro')  # Speak the response with Romanian language
+                speak(answer, lang='ro')
             else:
                 explanation = "Nu știu răspunsul la întrebarea ta. Te rog explică mai detaliat sau spune 'treci peste' pentru a trece peste."
                 print(explanation)
-                speak(explanation, lang='ro')  # Speak the explanation
-                user_explanation = listen_for_response()
-                if user_explanation == 'treci peste':
+                speak(explanation, lang='ro')
+                userExplanation = listen_for_response()
+                if userExplanation == 'treci peste':
                     print("Bot: Am înțeles că dorești să trecem peste. Continuăm cu următoarea întrebare.")
                     speak("Am înțeles că dorești să trecem peste. Continuăm cu următoarea întrebare.", lang='ro')
-                elif user_explanation:
-                    knowledge_base["questions"].append({"question": user_input, "answer": user_explanation})
-                    save_knowledge_base('knowledge_base.json', knowledge_base)
+                elif userExplanation:
+                    knowledgeBase["questions"].append({"question": userInput, "answer": userExplanation})
+                    saveKnowledgeBase('knowledgeBase.json', knowledgeBase)
                     print("Bot: Mulțumesc! Am învățat ceva nou.")
-                    speak("Mulțumesc! Am învățat ceva nou.", lang='ro')  # Speak the response with Romanian language
+                    speak("Mulțumesc! Am învățat ceva nou.", lang='ro')
 
-if __name__ == "__main__":
-    chatbot()
+
+chatbot()
