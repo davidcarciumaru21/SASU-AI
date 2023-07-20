@@ -54,7 +54,7 @@
     },
     {
       "question": "care este cartea ta preferat\u0103",
-      "answer": "o carte preferat\u0103"
+      "answer": "Nu am o carte preferat\u0103"
     },
     {
       "question": "care a fost cel mai frumos loc \u00een care c\u0103l\u0103toresc",
@@ -87,6 +87,26 @@
     {
       "question": "care este cel mai interesant lucru pe care l ai \u00eenv\u0103\u021bat recent",
       "answer": "am \u00eenv\u0103\u021bat s\u0103 vorbesc"
+    },
+    {
+      "question": "noapte bun\u0103",
+      "answer": "noapte bun\u0103"
+    },
+    {
+      "question": "cine e\u0219ti",
+      "answer": "Sunt o inteligen\u021ba artificial\u0103"
+    },
+    {
+      "question": "Cum te numesti",
+      "answer": "Ma numesc SASU"
+    },
+    {
+      "question": "Cate v\u00e2rfuri are un triunghi",
+      "answer": "Un triunghi are trei v\u00e2rfuri"
+    },
+    {
+      "question": "este capitala rom\u00e2niei",
+      "answer": "capitala rom\u00e2niei este bucure\u0219ti"
     }
   ]
 }
